@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Phishing Detector</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>URL Phishing Detector</h1>
+        
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form action="/scan" method="POST">
+            <div class="form-group">
+                <input type="url" name="url" placeholder="Enter URL to scan (e.g., http://example.com)" required>
+            </div>
+            <button type="submit">Check URL</button>
+        </form>
+        
+        <div class="info">
+            <h3>How it works:</h3>
+            <ul>
+                <li>Analyzes URL structure and patterns</li>
+                <li>Checks for suspicious characteristics</li>
+                <li>Uses machine learning to detect phishing attempts</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

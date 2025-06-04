@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phishing URL Scan Result</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 2em;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            background-color: #fff;
+            padding: 2em;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 1.5em;
+        }
+        h3 {
+            color: #16a085;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .safe {
+            background-color: #2ecc71;
+            color: white;
+        }
+        .phishing {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .suspicious {
+            background-color: #f39c12;
+            color: white;
+        }
+        .unknown {
+            background-color: #95a5a6;
+            color: white;
+        }
+        .feature-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .feature-table th, .feature-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .feature-table th {
+            background-color: #f2f2f2;
+        }
+        .feature-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        .risk-meter {
+            height: 20px;
+            background: linear-gradient(to right, #2ecc71, #f39c12, #e74c3c);
+            border-radius: 10px;
+            margin: 15px 0;
+            position: relative;
+        }
+        .risk-indicator {
+            position: absolute;
+            top: -5px;
+            width: 2px;
+            height: 30px;
+            background-color: black;
+        }
+        .severity-high {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .severity-medium {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .severity-low {
+            color: #3498db;
+        }
+        .scan-another {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .scan-another:hover {
+            background-color: #2980b9;
+        }
+        .feature-value {
+            font-weight: bold;
+        }
+        .positive-feature {
+            color: #e74c3c;
+        }
+        .negative-feature {
+            color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Phishing URL Scan Result</h1>
+
+        {% if result %}
+            <h2>Scanned URL</h2>
+            <p style="word-break: break-all;"><strong>{{ result.url }}</strong></p>
+
+            <h2>Security Assessment</h2>
+            <div class="status-badge {{ result.status|lower }}">
+                {{ result.status }} ({{ result.confidence }}% confidence)
+            </div>
+
+            <div class="risk-meter">
+                <div class="risk-indicator" style="left: {{ result.confidence | float}}%;"></div>
+            </div>
+
+            {% if result.reasons %}
+                <h3>Detection Reasons</h3>
+                <ul>
+                    {% for reason in result.reasons %}
+                        <li>{{ reason }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if result.features %}
+                <h3>Detailed Analysis</h3>
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Value</th>
+                            <th>Risk Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature, value in result.features.items() %}
+                            {% if value != 0 %}
+                                <tr>
+                                    <td>{{ feature }}</td>
+                                    <td class="feature-value {% if value > 0 %}positive-feature{% else %}negative-feature{% endif %}">
+                                        {{ value }}
+                                    </td>
+                                    <td>
+                                        {% if value > 1 %}
+                                            <span class="severity-high">High Risk</span>
+                                        {% elif value > 0.5 %}
+                                            <span class="severity-medium">Medium Risk</span>
+                                        {% elif value > 0 %}
+                                            <span class="severity-low">Low Risk</span>
+                                        {% else %}
+                                            <span class="negative-feature">Safe Indicator</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if result.virustotal %}
+                <h3>VirusTotal Analysis</h3>
+                <p><strong>Security Vendor Reports:</strong></p>
+                <ul>
+                    <li>Malicious: <span class="feature-value">{{ result.virustotal.malicious }}</span></li>
+                    <li>Suspicious: <span class="feature-value">{{ result.virustotal.suspicious }}</span></li>
+                    <li>Harmless: <span class="feature-value">{{ result.virustotal.harmless }}</span></li>
+                    <li>Undetected: <span class="feature-value">{{ result.virustotal.undetected }}</span></li>
+                </ul>
+            {% endif %}
+
+            <h3>Recommendations</h3>
+            {% if result.status == 'PHISHING' %}
+                <div class="severity-high">
+                    <p>❌ <strong>This URL is highly likely to be a phishing attempt.</strong></p>
+                    <ul>
+                        <li>Do not enter any personal or financial information</li>
+                        <li>Do not download any files from this site</li>
+                        <li>Report this URL to your security team</li>
+                    </ul>
+                </div>
+            {% elif result.status == 'SUSPICIOUS' %}
+                <div class="severity-medium">
+                    <p>⚠️ <strong>This URL shows suspicious characteristics.</strong></p>
+                    <ul>
+                        <li>Exercise extreme caution if you must visit this site</li>
+                        <li>Verify the site's legitimacy through official channels</li>
+                        <li>Do not enter sensitive information unless absolutely certain</li>
+                    </ul>
+                </div>
+            {% else %}
+                <div class="negative-feature">
+                    <p>✅ <strong>This URL appears safe based on our analysis.</strong></p>
+                    <ul>
+                        <li>Still exercise normal security precautions</li>
+                        <li>Ensure the site uses HTTPS for sensitive transactions</li>
+                        <li>Verify the site's identity if requesting personal information</li>
+                    </ul>
+                </div>
+            {% endif %}
+
+            <a href="{{ url_for('home') }}" class="scan-another">Scan another URL</a>
+        {% else %}
+            <p>Error: No result data received.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
