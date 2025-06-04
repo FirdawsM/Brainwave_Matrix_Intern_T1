@@ -116,8 +116,11 @@ python-dotenv
 
 ![First scan ](https://github.com/user-attachments/assets/ad49d234-b69b-4499-915a-d1572b4ae25a)
 ![first result ](https://github.com/user-attachments/assets/27d5df02-4f43-4c75-aeac-2474aa92b86b)
-![malicious URL scan recommendation](https://github.com/user-attachments/assets/d12aa45a-b014-4d7d-bc5d-2ce3ba26ac47)
+![Recommendations ](https://github.com/user-attachments/assets/14e3d2f9-cc1e-4857-8e2c-f6f3a1efbe3c)
+
+![suspicious URL scan ](https://github.com/user-attachments/assets/8048001c-bdab-4483-8716-15cb884a0d01)
 ![malicious URL scan report ](https://github.com/user-attachments/assets/c060655f-9531-4858-b98f-74c6d45d459f)
+![malicious URL scan recommendation](https://github.com/user-attachments/assets/1de9cde7-1d34-4a5e-a54b-be8958a7924a)
 
 
 
