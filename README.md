@@ -114,6 +114,14 @@ python-dotenv
 
 ---
 
+![First scan ](https://github.com/user-attachments/assets/ad49d234-b69b-4499-915a-d1572b4ae25a)
+![first result ](https://github.com/user-attachments/assets/27d5df02-4f43-4c75-aeac-2474aa92b86b)
+![malicious URL scan recommendation](https://github.com/user-attachments/assets/d12aa45a-b014-4d7d-bc5d-2ce3ba26ac47)
+![malicious URL scan report ](https://github.com/user-attachments/assets/c060655f-9531-4858-b98f-74c6d45d459f)
+
+
+
+
 ## 👨‍💻 Author
 
 **Firdaws Mohammed**  
